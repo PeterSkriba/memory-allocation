@@ -1,0 +1,8 @@
+# EXECUTABLE OUTPUT #
+*
+!/**/
+!*.*
+
+# PDF FILES #
+*.pdf
+!doc.pdf
