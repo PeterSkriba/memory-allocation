@@ -25,13 +25,18 @@
 // OPTIONS
 #define CLEAR
 
-// INTERFACE TODO: MEMORY USAGE
+// INTERFACE
 void memory_init(void *ptr, c_size_t size); //? O(1)
 void *memory_alloc(c_size_t size);          //? O(n); n = free list size
 int memory_free(void *valid_ptr);           //? O(n); n = free list size
-int memory_check(const void *ptr);          //?
+int memory_check(const void *ptr);          //? O(m + n); m = all memory blocks, n = free list size
 
 void display_block(const Header_t *block, const char name[10]);
+
+// TODO: MEMORY AND TIME USAGE
+// TODO: REFACTOR AND HEADER
+// TODO: TESTS - FRAGMENTATION
+// TODO: DOCUMENTATION
 
 int main()
 {
@@ -47,23 +52,26 @@ int main()
   if (pointer2)
     memset(pointer2, 2, 10);
 
-  if (pointer)
-    memory_free(pointer);
+  /*if (pointer)
+    memory_free(pointer);*/
 
-  /*if (pointer2)
-    memory_free(pointer2);*/
+  if (pointer2)
+    memory_free(pointer2);
 
   /*if (pointer)
     memory_free(pointer);*/
 
-  memory_check(pointer2);
+  printf((memory_check(pointer) ? GREEN "VALID %p\n" RESET : RED "INVALID %p\n" RESET), pointer);
 
+  //*************************************** DEBUG ********************************************************
+  putchar('\n');
   for (int i = 0; i < MEMORY_SIZE; ++i)
-    printf(GREEN BOLD "[%3d]: %-15d\t <- %p\n" RESET, i, region[i], &region[i]);
+    printf(YELLOW BOLD "[%3d]: %-15d\t <- %p\n" RESET, i, region[i], &region[i]);
 
   printf(RED BOLD "\nFREE BLOCKS:\n" RESET);
   for (Header_t *current = ((Header_t *)heap_g)->next; current != NULL; current = current->next)
     display_block(current, "FREE"); //!
+  //*******************************************************************************************************
 
   return 0;
 }
@@ -119,10 +127,10 @@ int memory_check(const void *ptr)
   while (current != heap_g && (void *)current >= ptr && TO_PAYLOAD(current) != ptr)
     current = TO_PREV_NEIGHBOR(current);
 
-  display_block(current, "CHECK");
-
   // returning true when pointer is valid and allocated
-  return current == NULL && current == heap_g && TO_PAYLOAD(current) == ptr && !IS_FREE(current);
+  return IS_VALID_POINTER(current) &&
+         TO_PAYLOAD(current) == ptr &&
+         !IS_FREE(current);
 }
 
 int memory_free(void *valid_ptr)
@@ -178,7 +186,7 @@ void *get_required_block(Header_t *block, c_size_t size)
     block->size = size;
 
     // header for free block
-    Header_t *free_header = TO_NEXT_HEADER(block);
+    Header_t *free_header = TO_NEXT_NEIGHBOR(block);
     free_header->size = GET_PAYLOAD_SIZE(remaining_block_size);
 
     // footer for free block

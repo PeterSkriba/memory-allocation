@@ -7,7 +7,7 @@
 void *heap_g = 0x0;
 
 // CONSTANTS
-#define MEMORY_SIZE 128
+#define MEMORY_SIZE 128                              // custom
 #define HEADER_SIZE 0xC                              // 12b
 #define FOOTER_SIZE 0x4                              // 4b
 #define MIN_BLOCK_SIZE 0x11                          // 17b
@@ -22,8 +22,6 @@ void *heap_g = 0x0;
 #define TO_PAYLOAD(header) ((void *)header + HEADER_SIZE)
 // move pointer to footer from header
 #define TO_FOOTER(header) (TO_PAYLOAD(header) + GET_HEADER_SIZE(header))
-// move pointer to next block header from actual block header
-#define TO_NEXT_HEADER(header) (TO_PAYLOAD(header) + GET_HEADER_SIZE(header) + FOOTER_SIZE)
 // get size of payload without header and footer size
 #define GET_PAYLOAD_SIZE(size) (size - HEADER_SIZE - FOOTER_SIZE)
 // move pointer from payload to next and previous blocks
