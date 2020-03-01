@@ -27,9 +27,9 @@
 
 // INTERFACE TODO: MEMORY USAGE
 void memory_init(void *ptr, c_size_t size); //? O(1)
-void *memory_alloc(c_size_t size);          //? O(n)
-int memory_free(void *valid_ptr);           //? O(n)
-int memory_check(void *ptr);                // TODO: MAKE
+void *memory_alloc(c_size_t size);          //? O(n); n = free list size
+int memory_free(void *valid_ptr);           //? O(n); n = free list size
+int memory_check(const void *ptr);          //?
 
 void display_block(const Header_t *block, const char name[10]);
 
@@ -56,6 +56,8 @@ int main()
   /*if (pointer)
     memory_free(pointer);*/
 
+  memory_check(pointer2);
+
   for (int i = 0; i < MEMORY_SIZE; ++i)
     printf(GREEN BOLD "[%3d]: %-15d\t <- %p\n" RESET, i, region[i], &region[i]);
 
@@ -72,7 +74,7 @@ void display_block(const Header_t *block, const char name[10])
     return;
 
   printf(BLUE BOLD "╔════════════╦═══════════════════╦╦════════╦════════════════╦╦══════════╗\n");
-  printf("║ %10s ║ [%14p]: ║║ %+5ub ║ %14p ║║ (%+5lub) ║\n", name, block, block->size, block->next, GET_BLOCK_SIZE(block->size));
+  printf("║ %10s ║ [%14p]: ║║ %5ub ║ %14p ║║ (%5ub) ║\n", name, block, block->size, block->next, GET_BLOCK_SIZE(block->size));
   printf("╚════════════╩═══════════════════╩╩════════╩════════════════╩╩══════════╝\n" RESET);
 }
 
@@ -97,8 +99,30 @@ void free_list_delete(Header_t *block)
   while (current->next != NULL && current->next != block)
     current = current->next;
 
+  // disconnect block from free list
   current->next = block->next;
   block->next = NULL;
+}
+
+int memory_check(const void *ptr)
+{
+  if (heap_g == NULL || !ptr || !IS_VALID_POINTER(ptr))
+    return 0;
+
+  Header_t *current = ((Header_t *)heap_g)->next;
+
+  // forward seaching greater pointer in free list
+  while (current != NULL && (void *)current <= ptr)
+    current = current->next;
+
+  // backward searching smaller pointer in memory
+  while (current != heap_g && (void *)current >= ptr && TO_PAYLOAD(current) != ptr)
+    current = TO_PREV_NEIGHBOR(current);
+
+  display_block(current, "CHECK");
+
+  // returning true when pointer is valid and allocated
+  return current == NULL && current == heap_g && TO_PAYLOAD(current) == ptr && !IS_FREE(current);
 }
 
 int memory_free(void *valid_ptr)
