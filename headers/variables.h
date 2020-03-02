@@ -7,7 +7,7 @@
 void *heap_g = 0x0;
 
 // CONSTANTS
-#define MEMORY_SIZE 128                              // custom
+//! #define MEMORY_SIZE 50000                        // custom
 #define HEADER_SIZE 0xC                              // 12B
 #define FOOTER_SIZE 0x4                              // 4B
 #define MIN_BLOCK_SIZE 0x11                          // 17B
