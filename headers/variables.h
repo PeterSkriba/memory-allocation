@@ -8,10 +8,10 @@ void *heap_g = 0x0;
 
 // CONSTANTS
 #define MEMORY_SIZE 128                              // custom
-#define HEADER_SIZE 0xC                              // 12b
-#define FOOTER_SIZE 0x4                              // 4b
-#define MIN_BLOCK_SIZE 0x11                          // 17b
-#define MIN_MEMORY_SIZE HEADER_SIZE + MIN_BLOCK_SIZE // 29b
+#define HEADER_SIZE 0xC                              // 12B
+#define FOOTER_SIZE 0x4                              // 4B
+#define MIN_BLOCK_SIZE 0x11                          // 17B
+#define MIN_MEMORY_SIZE HEADER_SIZE + MIN_BLOCK_SIZE // 29B
 #define FULL_SIGN 1                                  // full == header size + 1
 
 // MACROS

@@ -7,9 +7,9 @@
 
 /*
  * *************** BLOCK DESING ****************
- * - Total: 16b, Min 1b payload allowed
+ * - Total: 16B, Min 1B payload allowed
  *
- *    Header (12b)     Payload     Footer (4b)
+ *    Header (12B)     Payload     Footer (4B)
  * ╔════════╦══════╦╦═════════════╦╦═══════════╗
  * ║║ size ║ next ║║   content   ║║   size   ║║
  * ╚═══════╩══════╩╩═════════════╩╩═══════════╝
