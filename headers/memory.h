@@ -7,6 +7,7 @@
 #include <string.h> // memset
 
 // HEADERS
+#include "errors.h"
 #include "types.h"
 #include "variables.h"
 
@@ -59,12 +60,12 @@ int memory_check(const void *ptr)
 
 int memory_free(void *valid_ptr)
 {
-  if (heap_g == NULL || !valid_ptr)
+  if (heap_g == NULL || !valid_ptr || !memory_check(valid_ptr))
     return 1;
 
   // header and footer for new free block
   Header_t *block_header = valid_ptr - HEADER_SIZE;
-  block_header->size -= FULL_SIGN; // making block size free
+  block_header->size = TOGGLE_FULL_FREE(block_header->size); // making block size free
   Footer_t *block_footer = TO_FOOTER(block_header);
 
   // blocks for merging
@@ -94,7 +95,7 @@ int memory_free(void *valid_ptr)
   free_list_insert(block_header);
 
 #ifdef CLEAR
-  memset(TO_PAYLOAD(block_header), -1, block_header->size);
+  memset(TO_PAYLOAD(block_header), FREE_BYTE, block_header->size);
 #endif // CLEAR
 
   return 0;
@@ -126,10 +127,10 @@ void *get_required_block(Header_t *block, c_size_t size)
   footer->size = block->size;
 
 #ifdef TEST
-  memset(TO_PAYLOAD(block), -2, block->size);
+  memset(TO_PAYLOAD(block), FRAGMENT_BYTE, block->size);
 #endif // TEST
 
-  block->size += FULL_SIGN; // full block flag: 1
+  block->size = TOGGLE_FULL_FREE(block->size); // full block flag
 
   return block;
 }
@@ -160,8 +161,18 @@ void *memory_alloc(c_size_t size)
     return NULL;
 
   Header_t *free_block = get_free_block(size);
+
+  // memory full
   if (free_block == NULL)
+  {
+#ifdef ERROR
+    if (((Header_t *)heap_g)->next == NULL)
+      handle_error(MEMORY_FULL);
+    else
+      handle_error(NO_SPACE);
+#endif // ERROR
     return NULL;
+  }
 
   // split block and insert free block to list
   Header_t *user_block = get_required_block(free_block, size);
@@ -194,7 +205,7 @@ void memory_init(void *ptr, c_size_t size)
   memory_header->next = block_header;
 
 #ifdef TEST
-  memset(TO_PAYLOAD(block_header), -1, block_header->size);
+  memset(TO_PAYLOAD(block_header), FREE_BYTE, block_header->size);
 #endif // TEST
 }
 

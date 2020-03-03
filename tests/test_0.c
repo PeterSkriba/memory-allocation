@@ -2,6 +2,7 @@
 
 #include "../headers/memory.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main()
 {

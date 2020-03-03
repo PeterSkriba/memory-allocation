@@ -5,13 +5,17 @@
 #ifndef HELPERS
 #define HELPERS
 
+#include <time.h>
+
 #define FREEZE                                           \
   if (printf("\nPress ENTER to continue..."), getchar()) \
   {                                                      \
     /* void */                                           \
   }
 
-#define GET_PERCENT(x, y) ((int)(((double)(x) / (y)) * 100))
+#define GET_PERCENT(x, y) (((double)(x) / (y)) * 100)
+
+#define GET_RANDOM(from, to) ((rand() % ((to) - (from) + 1)) + (from))
 
 void display_block(const Header_t *block, const char name[10])
 {
@@ -19,24 +23,24 @@ void display_block(const Header_t *block, const char name[10])
     return;
 
   printf(BOLD "╔════════════╦═══════════════════╦╦════════╦════════════════╦╦════════╗\n");
-  printf("║ %10s ║ [%14p]: ║║ %5uB ║ %14p ║║ %5uB ║\n", name, block, block->size, block->next, GET_BLOCK_SIZE(block->size));
+  printf("║ %10s ║ [%14p]: ║║ %5dB ║ %14p ║║ %5dB ║\n", name, block, ABS(block->size), block->next, GET_BLOCK_SIZE(block->size));
   printf("╚════════════╩═══════════════════╩╩════════╩════════════════╩╩════════╝\n" RESET);
 }
 
-void print_memory(const char memory[MEMORY_SIZE])
+void print_memory(char region[], unsigned int size)
 {
 #if defined(TEST) && defined(CLEAR)
-  for (unsigned int i = 0; i < MEMORY_SIZE; ++i)
+  for (unsigned int i = 0; i < size; ++i)
   {
-    switch (memory[i])
+    switch (region[i])
     {
-    case -47:
+    case FULL_BYTE:
       printf(RED SQUARE RESET);
       break;
-    case -1:
+    case FREE_BYTE:
       printf(GREEN SQUARE RESET);
       break;
-    case -2:
+    case FRAGMENT_BYTE:
       printf(YELLOW SQUARE RESET);
       break;
     default:
@@ -56,10 +60,9 @@ void print_free_list()
     display_block(current, "FREE BLOCK");
 }
 
-void print_memory_text(const char region[MEMORY_SIZE])
+void print_memory_text(char region[], unsigned int size)
 {
-  printf("---------------------------------------------------------------------------\n");
-  for (int i = 0; i < MEMORY_SIZE; ++i)
+  for (unsigned int i = 0; i < size; ++i)
     printf(YELLOW BOLD "[%3d]: %-15d\t <- %p\n" RESET, i, region[i], &region[i]);
 }
 
