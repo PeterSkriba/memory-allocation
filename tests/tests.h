@@ -3,16 +3,16 @@
 #include "../headers/memory.h"
 #include "helpers.h"
 
-void test(c_size_t *memory_size, const unsigned int memory_idx, const unsigned int block_size)
+void test(c_size_t *memory_size, c_size_t memory_idx, c_size_t block_size)
 {
   char region[memory_size[memory_idx]];
 
   memory_init(region, memory_size[memory_idx]);
   char *pointer;
 
-  int can_allocate = (memory_size[memory_idx] / block_size) * block_size; // TODO: check
-  int fragmentation = memory_size[memory_idx];
-  int success = 0;
+  int32_t can_allocate = (memory_size[memory_idx] / block_size) * block_size; // TODO: check
+  int32_t fragmentation = memory_size[memory_idx];
+  int32_t success = 0;
 
   printf(RED BOLD "\nREQUIRED BLOCK SIZE: %uB / %uB\n" RESET, block_size, memory_size[memory_idx]);
   while ((pointer = (char *)memory_alloc(block_size)))
@@ -20,15 +20,15 @@ void test(c_size_t *memory_size, const unsigned int memory_idx, const unsigned i
     fragmentation -= block_size;
     success += block_size;
 
-    display_block((void *)pointer - HEADER_SIZE, "FULL BLOCK");
+    display_block(TO_FULL_HEADER(pointer), "FULL BLOCK");
 
     memset(pointer, FULL_BYTE, block_size);
   }
 
-  putchar('\n');
   print_memory(region, memory_size[memory_idx]);
 
-  putchar('\n');
+  // ! print_memory_text(region, memory_size[memory_idx]);
+
   print_free_list();
 
   putchar('\n');
@@ -39,10 +39,10 @@ void test(c_size_t *memory_size, const unsigned int memory_idx, const unsigned i
   FREEZE
 }
 
-void test_equal_blocks(c_size_t *memory_size, const unsigned int n, const unsigned int from, const unsigned int to)
+void test_equal_blocks(c_size_t *memory_size, c_size_t n, c_size_t from, c_size_t to)
 {
-  for (unsigned int memory_idx = 0; memory_idx < n; ++memory_idx)
-    for (unsigned int block_size = from; block_size <= to; ++block_size)
+  for (int32_t memory_idx = 0; memory_idx < n; ++memory_idx)
+    for (int32_t block_size = from; block_size <= to; ++block_size)
       test(memory_size, memory_idx, block_size);
 }
 
@@ -54,7 +54,7 @@ void test_custom_blocks(c_size_t memory_size)
   char *pointer;
 
   unsigned int block_size = 0;
-  while ((scanf("%u", &block_size) == 1))
+  while (scanf("%u", &block_size) == 1)
   {
     if (!(pointer = (char *)memory_alloc(block_size)))
       continue;
@@ -62,12 +62,38 @@ void test_custom_blocks(c_size_t memory_size)
     printf(RED BOLD "\nBLOCK SIZE: %uB, MEMORY SIZE: %uB\n" RESET, block_size, memory_size);
     memset(pointer, FULL_BYTE, block_size);
 
-    putchar('\n');
     print_memory(region, memory_size);
 
-    putchar('\n');
     print_free_list();
   }
+}
+
+void test_basic(c_size_t memory_size)
+{
+  char region[memory_size];
+
+  memory_init(region, memory_size);
+  printf(RED BOLD "\nMEMORY SIZE: %uB\n" RESET, memory_size);
+
+  char *pointer1 = (char *)memory_alloc(50);
+  if (pointer1)
+    memset(pointer1, FULL_BYTE, 50);
+
+  char *pointer2 = (char *)memory_alloc(80);
+  if (pointer2)
+    memset(pointer2, FULL_BYTE, 80);
+
+  char *pointer3 = (char *)memory_alloc(30);
+  if (pointer3)
+    memset(pointer3, FULL_BYTE, 30);
+
+  memory_free(pointer2);
+  memory_free(pointer1);
+  memory_free(pointer3);
+
+  print_memory(region, memory_size);
+
+  print_free_list();
 }
 
 // TODO: test random blocks

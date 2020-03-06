@@ -37,7 +37,7 @@ void free_list_delete(Header_t *block)
   block->next = NULL;
 }
 
-int memory_check(const void *ptr)
+int memory_check(const void *ptr) // !
 {
   if (heap_g == NULL || !ptr || !IS_VALID_POINTER(ptr))
     return 0;
@@ -60,13 +60,16 @@ int memory_check(const void *ptr)
 
 int memory_free(void *valid_ptr)
 {
-  if (heap_g == NULL || !valid_ptr || !memory_check(valid_ptr))
+  if (heap_g == NULL || !valid_ptr) //! memory check
     return 1;
 
   // header and footer for new free block
-  Header_t *block_header = valid_ptr - HEADER_SIZE;
-  block_header->size = TOGGLE_FULL_FREE(block_header->size); // making block size free
+  Header_t *block_header = valid_ptr - FULL_HEADER_SIZE;
+  // making block size free
+  block_header->size = TOGGLE_FULL_FREE(block_header->size) - POINTER_SIZE;
+
   Footer_t *block_footer = TO_FOOTER(block_header);
+  block_footer->size = block_header->size;
 
   // blocks for merging
   Header_t *left_neighbor = TO_PREV_NEIGHBOR(block_header);
@@ -101,18 +104,19 @@ int memory_free(void *valid_ptr)
   return 0;
 }
 
-void *get_required_block(Header_t *block, c_size_t size)
+void *get_required_block(Header_t *header, c_size_t size)
 {
-  c_size_t remaining_block_size = block->size - size;
+  header->size += POINTER_SIZE;
+  c_size_t new_block_size = header->size - size;
 
   // split block and insert free block to list
-  if (remaining_block_size >= MIN_BLOCK_SIZE)
+  if (new_block_size >= MIN_BLOCK_SIZE)
   {
-    block->size = size;
+    header->size = size;
 
     // header for free block
-    Header_t *free_header = TO_NEXT_NEIGHBOR(block);
-    free_header->size = GET_PAYLOAD_SIZE(remaining_block_size);
+    Header_t *free_header = TO_NEXT_HEADER(header);
+    free_header->size = GET_PAYLOAD_SIZE(new_block_size);
 
     // footer for free block
     Footer_t *free_footer = TO_FOOTER(free_header);
@@ -123,16 +127,17 @@ void *get_required_block(Header_t *block, c_size_t size)
   }
 
   // new footer for allocated block
-  Footer_t *footer = TO_FOOTER(block);
-  footer->size = block->size;
+  Footer_t *footer = TO_FULL_FOOTER(header);
+  footer->size = header->size;
 
 #ifdef TEST
-  memset(TO_PAYLOAD(block), FRAGMENT_BYTE, block->size);
+  memset(TO_FULL_PAYLOAD(header), FRAGMENT_BYTE, header->size);
 #endif // TEST
 
-  block->size = TOGGLE_FULL_FREE(block->size); // full block flag
+  // full block flag
+  header->size = TOGGLE_FULL_FREE(header->size);
 
-  return block;
+  return header;
 }
 
 void *get_free_block(c_size_t size)
@@ -141,7 +146,7 @@ void *get_free_block(c_size_t size)
   Header_t *before = heap_g;
 
   // first and best block of required size
-  while (current != NULL && current->size < size)
+  while (current != NULL && current->size < size - POINTER_SIZE)
     before = current, current = current->next;
 
   // free block not found

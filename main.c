@@ -16,15 +16,11 @@
 */
 
 #include <stdio.h>
-#include <string.h> // memset
 
 // OPTIONS
 #define CLEAR
 #define TEST
 #define ERROR
-
-#include "headers/memory.h"
-#include "tests/helpers.h"
 
 #include "tests/tests.h"
 
@@ -32,16 +28,18 @@
 // TODO: REFACTOR AND HEADER
 // TODO: TESTS - FRAGMENTATION - random tester
 // TODO: DOCUMENTATION
-// TODO: chyby + obojsmerny a min velkost 8
-// TODO: pointer ako offset
+// TODO: chyby
+// TODO: pointer ako offset + header switcher by size
 
 int main()
 {
-  int memory_size[] = {50, 100, 200};
+  /*int memory_size[] = {50, 100, 200};
 
-  test_equal_blocks(memory_size, 3, 8, 24);
+  test_equal_blocks(memory_size, 3, 8, 24);*/
 
   // test_custom_blocks(256);
+
+  test_basic(256);
 
   return 0;
 }
