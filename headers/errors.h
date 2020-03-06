@@ -6,15 +6,17 @@
 #include "types.h"
 #include "variables.h"
 
+#define PRINT_MESSAGE(message) printf(RED BOLD ITALIC BLINK "\n%s\n" RESET, message)
+
 void handle_error(Error_e error)
 {
   switch (error)
   {
   case NO_SPACE:
-    printf(RED BOLD ITALIC BLINK "\nERROR: Not Enough Space ! \n\n" RESET);
+    PRINT_MESSAGE("ERROR: Not Enough Space !");
     break;
   case MEMORY_FULL:
-    printf(RED BOLD ITALIC BLINK "\nERROR: Memory Full ! \n\n" RESET);
+    PRINT_MESSAGE("ERROR: Memory Full !");
     break;
   default:
     return;

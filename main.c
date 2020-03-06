@@ -9,10 +9,10 @@
  * *************** BLOCK DESING ****************
  * - Total: 16B, Min 1B payload allowed
  *
- *    Header (12B)     Payload     Footer (4B)
- * ╔════════╦══════╦╦═════════════╦╦═══════════╗
- * ║║ size ║ next ║║   content   ║║   size   ║║
- * ╚═══════╩══════╩╩═════════════╩╩═══════════╝
+ *   Header (12B)     Payload     Footer (4B)
+ * ╔══════╦══════╦╦═════════════╦╦══════════╗
+ * ║ size ║ next ║║   content   ║║   size   ║
+ * ╚══════╩══════╩╩═════════════╩╩══════════╝
 */
 
 #include <stdio.h>
@@ -37,13 +37,11 @@
 
 int main()
 {
-  /*
   int memory_size[] = {50, 100, 200};
 
   test_equal_blocks(memory_size, 3, 8, 24);
-  */
 
-  test_custom_blocks(256);
+  // test_custom_blocks(256);
 
   return 0;
 }
