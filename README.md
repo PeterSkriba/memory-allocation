@@ -11,15 +11,15 @@ This program is a simulation of memory allocation similar to the functionality f
 
 **Free block design**\
 Header (12B) | Payload | Footer (4B)\
-╔════╦════╦╦═══════╦╦════╗\
+╔═══╦════╦╦═════╦╦════╗\
 ║ size ║ next ║║ content ║║ size ║\
-╚════╩════╩╩═══════╩╩════╝
+╚═══╩════╩╩═════╩╩════╝
 
 **Full block design**\
 Header (4B) | Payload | Footer (4B)\
-╔════╦╦═══════╦╦════╗\
+╔═══╦╦═════╦╦════╗\
 ║ size ║║ content ║║ size ║\
-╚════╩╩═══════╩╩════╝
+╚═══╩╩═════╩╩════╝
 
 ## Installation
 
