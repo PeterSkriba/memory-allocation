@@ -38,7 +38,7 @@ int main()
 
   // test_custom_blocks(256);
 
-  // test_basic(256);
+  test_basic(256);
 
   //? Test 1
   // test_equal_blocks(memory_size_small, 3, 8, 24);
@@ -47,7 +47,7 @@ int main()
   // test_random_blocks(memory_size_small, 3, 8, 24);
 
   //? Test 3
-  test_random_blocks(memory_size_big, 5, 500, 5000);
+  // test_random_blocks(memory_size_big, 5, 500, 5000);
 
   //? Test 4
   // test_random_blocks(memory_size_big, 5, 8, 50000);

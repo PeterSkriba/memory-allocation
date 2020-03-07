@@ -116,9 +116,19 @@ void test_basic(c_size_t memory_size)
   if (pointer3)
     memset(pointer3, FULL_BYTE, 30);
 
+  printf("%p - %s\n", pointer1, memory_check(pointer1) ? "VALID" : "INVALID");
+  printf("%p - %s\n", pointer2, memory_check(pointer2) ? "VALID" : "INVALID");
+
+  FREEZE
+
   memory_free(pointer2);
   memory_free(pointer1);
   memory_free(pointer3);
+
+  printf("%p - %s\n", pointer2, memory_check(pointer2) ? "VALID" : "INVALID");
+  printf("%p - %s\n", 0, memory_check(0) ? "VALID" : "INVALID");
+  printf("%p - %s\n", heap_g + 14, memory_check(heap_g + 14) ? "VALID" : "INVALID");
+  printf("%p - %s\n", heap_g - 14, memory_check(heap_g - 14) ? "VALID" : "INVALID");
 
   print_memory(region, memory_size);
 

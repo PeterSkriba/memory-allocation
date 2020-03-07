@@ -37,20 +37,28 @@ void free_list_delete(Header_t *block)
   block->next = NULL;
 }
 
-int memory_check(const void *ptr) // !
+int memory_check(const void *ptr)
 {
-  if (heap_g == NULL || !ptr || !IS_VALID_POINTER(ptr))
+  if (heap_g == NULL || !ptr)
     return 0;
 
-  Header_t *current = ((Header_t *)heap_g)->next;
+  if (!IS_VALID_POINTER(ptr))
+  {
+#ifdef ERROR
+    handle_error(NOT_VALID_POINTER);
+#endif // ERROR
+    return 0;
+  }
+
+  Header_t *current = ((Header_t *)heap_g);
 
   // forward seaching greater pointer in free list
   while (current != NULL && (void *)current <= ptr)
     current = current->next;
 
   // backward searching smaller pointer in memory
-  while (current != heap_g && (void *)current >= ptr && TO_PAYLOAD(current) != ptr)
-    current = TO_PREV_NEIGHBOR(current);
+  while ((void *)current >= ptr && TO_PAYLOAD(current) != ptr)
+    current = TO_PREV_NEIGHBOR_FULL(current);
 
   // returning true when pointer is valid and allocated
   return IS_VALID_POINTER(current) &&
@@ -60,7 +68,7 @@ int memory_check(const void *ptr) // !
 
 int memory_free(void *valid_ptr)
 {
-  if (heap_g == NULL || !valid_ptr) //! memory check
+  if (heap_g == NULL || !valid_ptr || !memory_check(valid_ptr))
     return 1;
 
   // header and footer for new free block

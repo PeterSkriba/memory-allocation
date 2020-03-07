@@ -13,10 +13,13 @@ void handle_error(Error_e error)
   switch (error)
   {
   case NO_SPACE:
-    PRINT_MESSAGE("> Not Enough Space !");
+    PRINT_MESSAGE("> Not Enough SPACE !");
     break;
   case MEMORY_FULL:
-    PRINT_MESSAGE("> Memory Full !");
+    PRINT_MESSAGE("> Memory FULL !");
+    break;
+  case NOT_VALID_POINTER:
+    PRINT_MESSAGE("> Pointer is NOT VALID !");
     break;
   default:
     return;

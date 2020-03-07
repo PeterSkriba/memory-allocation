@@ -26,7 +26,8 @@ typedef struct Footer
 typedef enum Error
 {
   NO_SPACE = -1,
-  MEMORY_FULL = -2
+  MEMORY_FULL = -2,
+  NOT_VALID_POINTER = -3
 } Error_e;
 
 #endif

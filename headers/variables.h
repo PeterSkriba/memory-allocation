@@ -51,6 +51,7 @@ void *heap_g = 0x0;
 #define TO_NEXT_HEADER(header) (TO_FULL_PAYLOAD(header) + ABS(GET_HEADER_SIZE(header)) + FOOTER_SIZE)
 // move pointer from payload to next and previous blocks
 #define TO_PREV_NEIGHBOR(header) ((void *)header - FOOTER_SIZE - GET_FOOTER_SIZE(((void *)header - FOOTER_SIZE)) - HEADER_SIZE)
+#define TO_PREV_NEIGHBOR_FULL(header) ((void *)header - FOOTER_SIZE - GET_FOOTER_SIZE(((void *)header - FOOTER_SIZE)) - FULL_HEADER_SIZE)
 #define TO_NEXT_NEIGHBOR(header) (TO_FOOTER(header) + FOOTER_SIZE)
 // check if pointer is in memory range
 #define IS_VALID_POINTER(ptr) (((void *)(ptr) >= heap_g + HEADER_SIZE && (void *)(ptr) < TO_PAYLOAD(heap_g) + GET_HEADER_SIZE(heap_g)))
