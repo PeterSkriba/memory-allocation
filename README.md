@@ -1,6 +1,6 @@
 # Memory Allocation - Explicit free list
 
-This project was designed for the purpose of the assignment of the subject **Data Structures and Algorithms**.
+This project was designed for the purpose of the assignment of the subject **Data Structures and Algorithms**.\
 This program is a simulation of memory allocation similar to the functionality found int the stdlib.h library.
 
 ## Memory block design
@@ -9,16 +9,16 @@ This program is a simulation of memory allocation similar to the functionality f
 - Total size of full block: 9B
   _Minimum 1B payload allowed._
 
-**Free block design**
-Header (12B) | Payload | Footer (4B)
-╔══════╦══════╦╦═════════╦╦══════╗
-║ size ║ next ║║ content ║║ size ║
-╚══════╩══════╩╩═════════╩╩══════╝
+**Free block design**\
+Header (12B) | Payload | Footer (4B)\
+╔══════╦══════╦╦═════════╦╦══════╗\
+║ size ║ next ║║ content ║║ size ║\
+╚══════╩══════╩╩═════════╩╩══════╝\
 
-**Full block design**
-Header (4B) | Payload | Footer (4B)
-╔══════╦╦═════════╦╦══════╗
-║ size ║║ content ║║ size ║
+**Full block design**\
+Header (4B) | Payload | Footer (4B)\
+╔══════╦╦═════════╦╦══════╗\
+║ size ║║ content ║║ size ║\
 ╚══════╩╩═════════╩╩══════╝
 
 ## Installation
@@ -56,9 +56,9 @@ _Situated in [**main.c**](main.c)._
 
 ## Usage
 
-1. At first you need to call memory_init with parameters: pointer to the start of the region and size of the region.
+1. At first you need to call **memory_init** with parameters: pointer to the start of the region and size of the region.
 
-2. Then you can use other functions like memory_alloc (malloc), memory_free (free) and memory_check.
+2. Then you can use other functions like **memory_alloc** (malloc), **memory_free** (free) and **memory_check**.
 
 ## Description of functions
 
@@ -67,4 +67,4 @@ _Situated in [**main.c**](main.c)._
 - **memory_free**
 - **memory_check**
 
-By [@PeterSkriba](https://github.com/PeterSkriba), FIIT STU :+1:
+By [@PeterSkriba](https://github.com/PeterSkriba), FIIT STU BA :+1:
