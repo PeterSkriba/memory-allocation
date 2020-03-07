@@ -7,12 +7,20 @@
 
 /*
  * *************** BLOCK DESING ****************
- * - Total: 16B, Min 1B payload allowed
+ * - Total: 16B (free) 9B (full)
+ * - Min. 1B payload allowed
  *
+ *               * FREE BLOCK *
  *   Header (12B)     Payload     Footer (4B)
  * ╔══════╦══════╦╦═════════════╦╦══════════╗
  * ║ size ║ next ║║   content   ║║   size   ║
  * ╚══════╩══════╩╩═════════════╩╩══════════╝
+ *
+ *              * FULL BLOCK *
+ *  Header (4B)    Payload     Footer (4B)
+ * ╔══════════╦╦═════════════╦╦══════════╗
+ * ║   size   ║║   content   ║║   size   ║
+ * ╚══════════╩╩═════════════╩╩══════════╝
 */
 
 #include <stdio.h>
