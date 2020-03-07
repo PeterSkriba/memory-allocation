@@ -13,10 +13,10 @@ void handle_error(Error_e error)
   switch (error)
   {
   case NO_SPACE:
-    PRINT_MESSAGE("ERROR: Not Enough Space !");
+    PRINT_MESSAGE("> Not Enough Space !");
     break;
   case MEMORY_FULL:
-    PRINT_MESSAGE("ERROR: Memory Full !");
+    PRINT_MESSAGE("> Memory Full !");
     break;
   default:
     return;

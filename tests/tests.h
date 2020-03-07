@@ -1,7 +1,9 @@
 // TESTS - header
-
 #include "../headers/memory.h"
 #include "helpers.h"
+
+#include <stdlib.h>
+#include <time.h>
 
 void test(c_size_t *memory_size, c_size_t memory_idx, c_size_t block_size)
 {
@@ -10,19 +12,18 @@ void test(c_size_t *memory_size, c_size_t memory_idx, c_size_t block_size)
   memory_init(region, memory_size[memory_idx]);
   char *pointer;
 
-  int32_t can_allocate = (memory_size[memory_idx] / block_size) * block_size; // TODO: check
-  int32_t fragmentation = memory_size[memory_idx];
+  printf("\n-----------------------------------------------------------------------\n");
+  printf(RED BOLD "\nREQUIRED BLOCK SIZE: %dB / %dB\n" RESET, block_size, memory_size[memory_idx]);
+
+  int32_t ideal = (memory_size[memory_idx] / block_size) * block_size;
   int32_t success = 0;
 
-  printf(RED BOLD "\nREQUIRED BLOCK SIZE: %uB / %uB\n" RESET, block_size, memory_size[memory_idx]);
   while ((pointer = (char *)memory_alloc(block_size)))
   {
-    fragmentation -= block_size;
     success += block_size;
 
-    display_block(TO_FULL_HEADER(pointer), "FULL BLOCK");
-
     memset(pointer, FULL_BYTE, block_size);
+    display_block(TO_FULL_HEADER(pointer), "FULL BLOCK");
   }
 
   print_memory(region, memory_size[memory_idx]);
@@ -31,10 +32,7 @@ void test(c_size_t *memory_size, c_size_t memory_idx, c_size_t block_size)
 
   print_free_list();
 
-  putchar('\n');
-  printf(YELLOW ITALIC "FRAGMENTATION: " RESET);
-  printf(BLUE ITALIC "%dB (%.2lf%%) of %dB\n" RESET, fragmentation, GET_PERCENT(fragmentation, memory_size[memory_idx]), memory_size[memory_idx]);
-  printf(RED ITALIC "SUCCESSFULY ALLOCATED: %dB (%.2lf%%) of %dB\n" RESET, success, GET_PERCENT(success, can_allocate), can_allocate);
+  printf(RED ITALIC "\nSUCCESSFULY ALLOCATED: %dB (%.2lf%%) of %dB\n" RESET, success, GET_PERCENT(success, ideal), ideal);
 
   FREEZE
 }
@@ -46,6 +44,35 @@ void test_equal_blocks(c_size_t *memory_size, c_size_t n, c_size_t from, c_size_
       test(memory_size, memory_idx, block_size);
 }
 
+void test_random_blocks(c_size_t *memory_size, c_size_t n, c_size_t from, c_size_t to)
+{
+  srand(time(0));
+
+  for (int32_t memory_idx = 0; memory_idx < n; ++memory_idx)
+  {
+    char region[memory_size[memory_idx]];
+
+    memory_init(region, memory_size[memory_idx]);
+    char *pointer;
+
+    printf("\n-----------------------------------------------------------------------\n");
+    printf(RED BOLD "MEMORY SIZE: %dB\n" RESET, memory_size[memory_idx]);
+
+    int32_t block_size = 0;
+    while ((pointer = (char *)memory_alloc((block_size = GET_RANDOM(from, to)))))
+    {
+      memset(pointer, FULL_BYTE, block_size);
+      display_block(TO_FULL_HEADER(pointer), "FULL BLOCK");
+    }
+
+    print_memory(region, memory_size[memory_idx]);
+
+    print_free_list();
+
+    FREEZE
+  }
+}
+
 void test_custom_blocks(c_size_t memory_size)
 {
   char region[memory_size];
@@ -53,13 +80,15 @@ void test_custom_blocks(c_size_t memory_size)
   memory_init(region, memory_size);
   char *pointer;
 
-  unsigned int block_size = 0;
-  while (scanf("%u", &block_size) == 1)
+  int32_t block_size = 0;
+  while (scanf("%d", &block_size) == 1)
   {
     if (!(pointer = (char *)memory_alloc(block_size)))
       continue;
 
-    printf(RED BOLD "\nBLOCK SIZE: %uB, MEMORY SIZE: %uB\n" RESET, block_size, memory_size);
+    printf("\n-----------------------------------------------------------------------\n");
+    printf(RED BOLD "\nBLOCK SIZE: %dB, MEMORY SIZE: %dB\n" RESET, block_size, memory_size);
+
     memset(pointer, FULL_BYTE, block_size);
 
     print_memory(region, memory_size);
@@ -73,7 +102,7 @@ void test_basic(c_size_t memory_size)
   char region[memory_size];
 
   memory_init(region, memory_size);
-  printf(RED BOLD "\nMEMORY SIZE: %uB\n" RESET, memory_size);
+  printf(RED BOLD "\nMEMORY SIZE: %dB\n" RESET, memory_size);
 
   char *pointer1 = (char *)memory_alloc(50);
   if (pointer1)
@@ -95,5 +124,3 @@ void test_basic(c_size_t memory_size)
 
   print_free_list();
 }
-
-// TODO: test random blocks

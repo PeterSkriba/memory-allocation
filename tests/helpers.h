@@ -15,7 +15,7 @@
 
 #define GET_PERCENT(x, y) (((double)(x) / (y)) * 100)
 
-#define GET_RANDOM(from, to) ((rand() % ((to) - (from) + 1)) + (from)) // TODO: this
+#define GET_RANDOM(from, to) ((rand() % ((to) - (from) + 1)) + (from))
 
 void display_block(const Header_t *block, const char name[10])
 {
