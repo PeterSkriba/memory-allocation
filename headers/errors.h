@@ -21,6 +21,9 @@ void handle_error(Error_e error)
   case NOT_VALID_POINTER:
     PRINT_MESSAGE("> Pointer is NOT VALID !");
     break;
+  case MIN_MEMORY:
+    PRINT_MESSAGE("> Small memory SIZE !");
+    break;
   default:
     return;
   }

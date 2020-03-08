@@ -32,11 +32,8 @@
 
 #include "tests/tests.h"
 
-// TODO: MEMORY AND TIME USAGE
-// TODO: REFACTOR AND HEADER
 // TODO: TESTS - FRAGMENTATION
 // TODO: DOCUMENTATION
-// TODO: chyby
 // TODO: pointer ako offset + header switcher by size
 
 int main()
@@ -46,10 +43,10 @@ int main()
 
   // test_custom_blocks(256);
 
-  test_basic(256);
+  // test_basic(256);
 
   //? Test 1
-  // test_equal_blocks(memory_size_small, 3, 8, 24);
+  test_equal_blocks(memory_size_small, 3, 8, 24);
 
   //? Test 2
   // test_random_blocks(memory_size_small, 3, 8, 24);

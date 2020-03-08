@@ -27,7 +27,8 @@ typedef enum Error
 {
   NO_SPACE = -1,
   MEMORY_FULL = -2,
-  NOT_VALID_POINTER = -3
+  NOT_VALID_POINTER = -3,
+  MIN_MEMORY = -4
 } Error_e;
 
 #endif

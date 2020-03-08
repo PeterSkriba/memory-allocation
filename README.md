@@ -7,21 +7,22 @@ This program is a simulation of memory allocation similar to the functionality f
 
 - Total size of free block: 16B
 - Total size of full block: 9B
-  _Minimum 1B payload allowed._
 
-**Free block design**\
-Header (12B) | Payload | Footer (4B)\
-╔═══╦════╦╦═════╦╦═══╗\
-║ size ║ next ║║ content ║║ size ║\
-╚═══╩════╩╩═════╩╩═══╝
+### Free block design
 
-**Full block design**\
-Header (4B) | Payload | Footer (4B)\
-╔═══╦╦══════╦╦═══╗\
-║ size ║║ content ║║ size ║\
-╚═══╩╩══════╩╩═══╝
+| Header (12B) | Payload | Footer (4B) |
+| :----------: | :-----: | :---------: |
+| size \| next | content |    size     |
 
-## Installation
+## Full block design
+
+| Header (4B) | Payload | Footer (4B) |
+| :---------: | :-----: | :---------: |
+|    size     | content |    size     |
+
+_Minimum 1B payload allowed._
+
+## Compile and Run
 
 _Windows and Linux compatible._
 
@@ -42,6 +43,12 @@ int memory_check(const void *ptr);
 int memory_free(void *valid_ptr);
 ```
 
+## Project structure
+
+- **[**main.c**](main.c)**: Main file with examples and tests.
+- **[**headers**](headers)**: Header files containing memory allocation algorithm.
+- **[**tests**](tests)**: Folder with tests and header file containing helper functions for tests.
+
 ## Options
 
 _Situated in [**main.c**](main.c)._
@@ -51,6 +58,10 @@ _Situated in [**main.c**](main.c)._
 #define TEST
 #define ERROR
 ```
+
+- **CLEAR**: Clear payload after memory_free.
+- **TEST**: Memory visualization.
+- **ERROR**: Error messages.
 
 **_Comment out to turn off._**
 
@@ -62,9 +73,24 @@ _Situated in [**main.c**](main.c)._
 
 ## Description of functions
 
-- **memory_init**
-- **memory_alloc**
-- **memory_free**
-- **memory_check**
+### memory_init
+
+- _Time complexity_: O(1)
+- _Space complexity_: O(1)
+
+### memory_alloc
+
+- _Time complexity_: O(n), n = linked list nodes
+- _Space complexity_: O(1)
+
+### memory_free
+
+- _Time complexity_: O(n), n = linked list nodes
+- _Space complexity_: O(1)
+
+### memory_check
+
+- _Time complexity_: O(n), n = memory blocks
+- _Space complexity_: O(1)
 
 By [@PeterSkriba](https://github.com/PeterSkriba), FIIT STU BA :+1:

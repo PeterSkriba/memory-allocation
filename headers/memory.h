@@ -3,7 +3,6 @@
 #ifndef MEMORY
 #define MEMORY
 
-#include <stdio.h>
 #include <string.h> // memset
 
 // HEADERS
@@ -37,6 +36,10 @@ void free_list_delete(Header_t *block)
   block->next = NULL;
 }
 
+/*
+ * Time complexity: O(n), n = memory blocks
+ * Space complexity: O(1)
+*/
 int memory_check(const void *ptr)
 {
   if (heap_g == NULL || !ptr)
@@ -66,6 +69,10 @@ int memory_check(const void *ptr)
          !IS_FREE(current);
 }
 
+/*
+ * Time complexity: O(n), n = linked list nodes
+ * Space complexity: O(1)
+*/
 int memory_free(void *valid_ptr)
 {
   if (heap_g == NULL || !valid_ptr || !memory_check(valid_ptr))
@@ -105,9 +112,9 @@ int memory_free(void *valid_ptr)
 
   free_list_insert(block_header);
 
-#ifdef CLEAR
+#if defined(CLEAR) || defined(TEST)
   memset(TO_PAYLOAD(block_header), FREE_BYTE, block_header->size);
-#endif // CLEAR
+#endif // CLEAR || TEST
 
   return 0;
 }
@@ -168,6 +175,10 @@ void *get_free_block(c_size_t size)
   return current;
 }
 
+/*
+ * Time complexity: O(n), n = linked list nodes
+ * Space complexity: O(1)
+*/
 void *memory_alloc(c_size_t size)
 {
   if (heap_g == NULL || !size)
@@ -194,10 +205,22 @@ void *memory_alloc(c_size_t size)
   return TO_PAYLOAD(user_block);
 }
 
+/*
+ * Time complexity: O(1)
+ * Space complexity: O(1)
+*/
 void memory_init(void *ptr, c_size_t size)
 {
-  if (ptr == NULL || !size || size < MIN_MEMORY_SIZE)
+  if (ptr == NULL || !size)
     return;
+
+  if (size < MIN_MEMORY_SIZE)
+  {
+#ifdef ERROR
+    handle_error(MIN_MEMORY);
+#endif // ERROR
+    return;
+  }
 
   heap_g = ptr;
 

@@ -1,4 +1,8 @@
 // TESTS - header
+
+#ifndef TESTS
+#define TESTS
+
 #include "../headers/memory.h"
 #include "helpers.h"
 
@@ -126,7 +130,7 @@ void test_basic(c_size_t memory_size)
   memory_free(pointer3);
 
   printf("%p - %s\n", pointer2, memory_check(pointer2) ? "VALID" : "INVALID");
-  printf("%p - %s\n", 0, memory_check(0) ? "VALID" : "INVALID");
+  printf("%p - %s\n", (void *)0, memory_check(0) ? "VALID" : "INVALID");
   printf("%p - %s\n", heap_g + 14, memory_check(heap_g + 14) ? "VALID" : "INVALID");
   printf("%p - %s\n", heap_g - 14, memory_check(heap_g - 14) ? "VALID" : "INVALID");
 
@@ -134,3 +138,5 @@ void test_basic(c_size_t memory_size)
 
   print_free_list();
 }
+
+#endif
