@@ -14,7 +14,7 @@ This program is a simulation of memory allocation similar to the functionality f
 | :----------: | :-----: | :---------: |
 | size \| next | content |    size     |
 
-## Full block design
+### Full block design
 
 | Header (4B) | Payload | Footer (4B) |
 | :---------: | :-----: | :---------: |
