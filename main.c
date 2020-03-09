@@ -7,8 +7,8 @@
 
 /*
  * *************** BLOCK DESING ****************
- * - Total: 16B (free) 9B (full)
- * - Min. 1B payload allowed
+ * - Total: 16B (free) / 9B (full)
+ * - Minimum 1B payload allowed
  *
  *               * FREE BLOCK *
  *   Header (12B)     Payload     Footer (4B)

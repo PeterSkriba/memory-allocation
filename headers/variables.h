@@ -10,7 +10,6 @@
 void *heap_g = 0x0;
 
 // CONSTANTS
-//! #define MEMORY_SIZE 50000                                       // custom
 #define MIN_PAYLOAD_SIZE 0x1                                        // 1B || 8B
 #define HEADER_SIZE 0xC                                             // 12B
 #define FOOTER_SIZE 0x4                                             // 4B

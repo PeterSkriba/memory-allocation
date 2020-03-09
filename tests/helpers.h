@@ -1,21 +1,19 @@
 // HELPERS - header
 
-#ifdef MEMORY
-
 #ifndef HELPERS
 #define HELPERS
 
 #include <time.h>
+
+#define GET_PERCENT(x, y) (((double)(x) / (y)) * 100)
+
+#define GET_RANDOM(from, to) ((rand() % ((to) - (from) + 1)) + (from))
 
 #define FREEZE                                           \
   if (printf("\nPress ENTER to continue..."), getchar()) \
   {                                                      \
     /* void */                                           \
   }
-
-#define GET_PERCENT(x, y) (((double)(x) / (y)) * 100)
-
-#define GET_RANDOM(from, to) ((rand() % ((to) - (from) + 1)) + (from))
 
 void display_block(const Header_t *block, const char name[10])
 {
@@ -73,7 +71,5 @@ void print_memory_text(char region[], c_size_t size)
   for (int32_t byte = 0; byte < size; ++byte)
     printf(YELLOW BOLD "[%3d]: %-15d\t <- %p\n" RESET, byte, region[byte], &region[byte]);
 }
-
-#endif
 
 #endif
