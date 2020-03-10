@@ -39,6 +39,7 @@ void *heap_g = 0x0;
 #define GET_PAYLOAD_SIZE(size) (ABS(size) - HEADER_SIZE - FOOTER_SIZE)
 // check if block is not allocated
 #define IS_FREE(header) (GET_HEADER_SIZE(header) > 0)
+#define IS_PREV_FOOTER_FREE(header) (GET_FOOTER_SIZE((void *)header - FOOTER_SIZE) > 0)
 // move pointer to payload from header
 #define TO_PAYLOAD(header) ((void *)(header) + (IS_FREE(header) ? HEADER_SIZE : FULL_HEADER_SIZE))
 #define TO_FULL_PAYLOAD(header) ((void *)header + FULL_HEADER_SIZE)
@@ -50,11 +51,13 @@ void *heap_g = 0x0;
 // move pointer to next header from full block
 #define TO_NEXT_HEADER(header) (TO_FULL_PAYLOAD(header) + ABS(GET_HEADER_SIZE(header)) + FOOTER_SIZE)
 // move pointer from payload to next and previous blocks
-#define TO_PREV_NEIGHBOR(header) ((void *)header - FOOTER_SIZE - GET_FOOTER_SIZE(((void *)header - FOOTER_SIZE)) - HEADER_SIZE)
-#define TO_PREV_NEIGHBOR_FULL(header) ((void *)header - FOOTER_SIZE - GET_FOOTER_SIZE(((void *)header - FOOTER_SIZE)) - FULL_HEADER_SIZE)
+#define TO_PREV_NEIGHBOR(header) ((void *)header - FOOTER_SIZE - ABS(GET_FOOTER_SIZE(((void *)header - FOOTER_SIZE))) - HEADER_SIZE)
+#define TO_PREV_NEIGHBOR_FULL(header) ((void *)header - FOOTER_SIZE - ABS(GET_FOOTER_SIZE(((void *)header - FOOTER_SIZE))) - FULL_HEADER_SIZE)
 #define TO_NEXT_NEIGHBOR(header) (TO_FOOTER(header) + FOOTER_SIZE)
 // check if pointer is in memory range
-#define IS_VALID_POINTER(ptr) (((void *)(ptr) >= heap_g + HEADER_SIZE && (void *)(ptr) < TO_PAYLOAD(heap_g) + GET_HEADER_SIZE(heap_g)))
+#define IS_VALID_POINTER(ptr) (((void *)(ptr) >= heap_g + HEADER_SIZE && (void *)(ptr) < heap_g + HEADER_SIZE + GET_HEADER_SIZE(heap_g)))
+// return end of memory pointer
+#define GET_END_OF_MEMORY() (heap_g + HEADER_SIZE + GET_HEADER_SIZE(heap_g))
 // making block full by changing size to negative
 #define TOGGLE_FULL_FREE(size) (size * FULL_SIGN)
 

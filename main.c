@@ -45,8 +45,10 @@ int main()
 
   // test_basic(256);
 
+  test_basic_2(256);
+
   //? Test 1
-  test_equal_blocks(memory_size_small, 3, 8, 24);
+  // test_equal_blocks(memory_size_small, 3, 8, 24);
 
   //? Test 2
   // test_random_blocks(memory_size_small, 3, 8, 24);

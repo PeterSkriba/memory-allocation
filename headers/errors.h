@@ -3,6 +3,8 @@
 #ifndef ERRORS
 #define ERRORS
 
+#include <stdio.h>
+
 #include "types.h"
 #include "variables.h"
 

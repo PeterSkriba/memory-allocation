@@ -53,14 +53,18 @@ int memory_check(const void *ptr)
     return 0;
   }
 
-  Header_t *current = ((Header_t *)heap_g);
+  Header_t *current = ((Header_t *)heap_g)->next;
 
   // forward seaching greater pointer in free list
   while (current != NULL && (void *)current <= ptr)
     current = current->next;
 
+  // move to the end of the memory if memory is full
+  if (current == NULL)
+    current = GET_END_OF_MEMORY();
+
   // backward searching smaller pointer in memory
-  while ((void *)current >= ptr && TO_PAYLOAD(current) != ptr)
+  while ((void *)current >= ptr && TO_PAYLOAD(current) != ptr && !IS_PREV_FOOTER_FREE(current))
     current = TO_PREV_NEIGHBOR_FULL(current);
 
   // returning true when pointer is valid and allocated
@@ -150,7 +154,7 @@ void *get_required_block(Header_t *header, c_size_t size)
 #endif // TEST
 
   // full block flag
-  header->size = TOGGLE_FULL_FREE(header->size);
+  header->size = footer->size = TOGGLE_FULL_FREE(header->size);
 
   return header;
 }
@@ -211,6 +215,8 @@ void *memory_alloc(c_size_t size)
 */
 void memory_init(void *ptr, c_size_t size)
 {
+  heap_g = NULL;
+
   if (ptr == NULL || !size)
     return;
 

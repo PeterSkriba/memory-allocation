@@ -139,4 +139,42 @@ void test_basic(c_size_t memory_size)
   print_free_list();
 }
 
+void test_basic_2(c_size_t memory_size) //!
+{
+  char region[memory_size];
+
+  memory_init(region, memory_size);
+  printf(RED BOLD "\nMEMORY SIZE: %dB\n" RESET, memory_size);
+
+  char *pointer1 = (char *)memory_alloc(50);
+  if (pointer1)
+    memset(pointer1, FULL_BYTE, 50);
+
+  char *pointer2 = (char *)memory_alloc(80);
+  if (pointer2)
+    memset(pointer2, FULL_BYTE, 80);
+
+  char *pointer3 = (char *)memory_alloc(30);
+  if (pointer3)
+    memset(pointer3, FULL_BYTE, 30);
+
+  printf("%p - %s\n", pointer1, memory_check(pointer1) ? "VALID" : "INVALID");
+  printf("%p - %s\n", pointer2, memory_check(pointer2) ? "VALID" : "INVALID");
+
+  FREEZE
+
+  memory_free(pointer2);
+  memory_free(pointer1);
+  memory_free(pointer3);
+
+  printf("%p - %s\n", pointer2, memory_check(pointer2) ? "VALID" : "INVALID");
+  printf("%p - %s\n", (void *)0, memory_check(0) ? "VALID" : "INVALID");
+  printf("%p - %s\n", heap_g + 14, memory_check(heap_g + 14) ? "VALID" : "INVALID");
+  printf("%p - %s\n", heap_g - 14, memory_check(heap_g - 14) ? "VALID" : "INVALID");
+
+  print_memory(region, memory_size);
+
+  print_free_list();
+}
+
 #endif
