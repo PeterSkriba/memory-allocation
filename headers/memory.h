@@ -205,6 +205,10 @@ void *memory_alloc(c_size_t size)
   // split block and insert free block to list
   Header_t *user_block = get_required_block(free_block, size);
 
+#ifdef TEST
+  memset(TO_PAYLOAD(user_block), FULL_BYTE, size);
+#endif // TEST
+
   // returning payload of block
   return TO_PAYLOAD(user_block);
 }

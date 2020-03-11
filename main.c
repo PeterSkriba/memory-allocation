@@ -32,20 +32,17 @@
 
 #include "tests/tests.h"
 
-// TODO: TESTS - FRAGMENTATION
+// TODO: TESTS
 // TODO: DOCUMENTATION
-// TODO: pointer ako offset + header switcher by size
 
 int main()
 {
   int32_t memory_size_small[] = {50, 100, 200};
   int32_t memory_size_big[] = {1000, 15000, 25000, 40000, 50000};
 
+  //? Other tests
   // test_custom_blocks(256);
-
   // test_basic(256);
-
-  test_basic_2(256);
 
   //? Test 1
   // test_equal_blocks(memory_size_small, 3, 8, 24);
@@ -58,6 +55,8 @@ int main()
 
   //? Test 4
   // test_random_blocks(memory_size_big, 5, 8, 50000);
+
+  //? Custom tests
 
   return 0;
 }
