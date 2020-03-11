@@ -156,7 +156,7 @@ int main()
     printf("run-up malloc of ptr[4] failed for size %d\n",
            size / 2);
   }
-  /*
+
   /*
 	 * at this point, we should start walking back from size/2 until we
 	 * find a size we can malloc

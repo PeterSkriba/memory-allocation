@@ -10,4 +10,5 @@
 # FOLDERS #
 documentation/
 
+test.c
 testovac.c

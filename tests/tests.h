@@ -37,8 +37,6 @@ void test(c_size_t *memory_size, c_size_t memory_idx, c_size_t block_size)
   print_free_list();
 
   printf(RED ITALIC "\nSUCCESSFULY ALLOCATED: %dB (%.2lf%%) of %dB\n" RESET, success, GET_PERCENT(success, ideal), ideal);
-
-  FREEZE
 }
 
 void test_equal_blocks(c_size_t *memory_size, c_size_t n, c_size_t from, c_size_t to)
@@ -137,6 +135,30 @@ void test_basic(c_size_t memory_size)
   print_memory(region, memory_size);
 
   print_free_list();
+}
+
+void test_valid_pointers(c_size_t size)
+{
+  char region[size];
+  memory_init(region, size);
+
+  print_memory_text(region, size);
+
+  putchar('\n');
+  for (int offset = -20; offset < size + 20; ++offset)
+  {
+    if (heap_g + offset == heap_g)
+      printf(YELLOW "MEMORY START\n" RESET);
+
+    if (heap_g + offset == heap_g + HEADER_SIZE)
+      printf(YELLOW "AVAILABLE MEMORY\n" RESET);
+
+    if (heap_g + offset == GET_END_OF_MEMORY())
+      printf(YELLOW "MEMORY END\n" RESET);
+
+    printf("%p --> ", heap_g + offset);
+    printf(IS_VALID_POINTER(heap_g + offset) ? (GREEN "VALID\n" RESET) : (RED "INVALID\n" RESET));
+  }
 }
 
 #endif

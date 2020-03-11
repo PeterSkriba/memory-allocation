@@ -57,6 +57,7 @@ int main()
   // test_random_blocks(memory_size_big, 5, 8, 50000);
 
   //? Custom tests
+  // test_valid_pointers(128);
 
   return 0;
 }

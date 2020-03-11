@@ -185,7 +185,7 @@ void *get_free_block(c_size_t size)
 */
 void *memory_alloc(c_size_t size)
 {
-  if (heap_g == NULL || !size)
+  if (heap_g == NULL || size <= 0)
     return NULL;
 
   Header_t *free_block = get_free_block(size);
@@ -221,7 +221,7 @@ void memory_init(void *ptr, c_size_t size)
 {
   heap_g = NULL;
 
-  if (ptr == NULL || !size)
+  if (ptr == NULL || size <= 0)
     return;
 
   if (size < MIN_MEMORY_SIZE)
