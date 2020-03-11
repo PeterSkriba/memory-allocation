@@ -32,7 +32,7 @@ void display_block(const Header_t *block, const char name[10])
 
 void print_memory(char region[], c_size_t size)
 {
-#if defined(TEST)
+#ifdef CLEAR
   putchar('\n');
   for (int32_t byte = 0; byte < size; ++byte)
   {
@@ -55,7 +55,7 @@ void print_memory(char region[], c_size_t size)
       putchar('\n');
   }
   putchar('\n');
-#endif // TEST
+#endif // CLEAR
 }
 
 void print_free_list()

@@ -10,11 +10,11 @@
 void *heap_g = 0x0;
 
 // CONSTANTS
-#define MIN_PAYLOAD_SIZE 0x1                                        // 1B || 8B
-#define HEADER_SIZE 0xC                                             // 12B
-#define FOOTER_SIZE 0x4                                             // 4B
-#define MIN_BLOCK_SIZE HEADER_SIZE + MIN_PAYLOAD_SIZE + FOOTER_SIZE // 17B
-#define MIN_MEMORY_SIZE HEADER_SIZE + MIN_BLOCK_SIZE                // 29B
+#define MIN_PAYLOAD_SIZE 0x8                         // 1B || 8B
+#define HEADER_SIZE 0xC                              // 12B
+#define FOOTER_SIZE 0x4                              // 4B
+#define MIN_BLOCK_SIZE HEADER_SIZE + FOOTER_SIZE     // 16B
+#define MIN_MEMORY_SIZE HEADER_SIZE + MIN_BLOCK_SIZE // 29B
 #define FULL_SIGN -1
 
 #ifdef REWRITE_POINTER

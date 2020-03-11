@@ -27,7 +27,6 @@
 
 // OPTIONS
 #define CLEAR
-#define TEST
 #define ERROR
 
 #include "tests/tests.h"
@@ -58,6 +57,7 @@ int main()
 
   //? Custom tests
   // test_valid_pointers(128);
+  // test_memory_free_cases();
 
   return 0;
 }

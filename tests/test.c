@@ -6,7 +6,7 @@
 
 int main()
 {
-  static char region[16384];
+  char region[16384];
 
   memory_init(region, 16384);
 

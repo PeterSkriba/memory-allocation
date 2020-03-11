@@ -84,18 +84,18 @@ int memory_free(void *valid_ptr)
 
   // header and footer for new free block
   Header_t *block_header = valid_ptr - FULL_HEADER_SIZE;
-  // making block size free
-  block_header->size = TOGGLE_FULL_FREE(block_header->size) - POINTER_SIZE;
-
   Footer_t *block_footer = TO_FOOTER(block_header);
-  block_footer->size = block_header->size;
+
+  // making block size free
+  block_header->size = block_footer->size = TOGGLE_FULL_FREE(block_header->size) - POINTER_SIZE;
 
   // blocks for merging
   Header_t *left_neighbor = TO_PREV_NEIGHBOR(block_header);
   Header_t *right_neighbor = TO_NEXT_NEIGHBOR(block_header);
 
+  //TODO: refactor
   // checking left neighbor and merging header
-  if (IS_VALID_POINTER(left_neighbor) && IS_FREE(left_neighbor))
+  if (IS_VALID_POINTER(left_neighbor) && GET_HEADER_SIZE(left_neighbor) >= 0)
   {
     free_list_delete(left_neighbor);
 
@@ -105,7 +105,7 @@ int memory_free(void *valid_ptr)
   }
 
   // checking right neighbor and merging footer
-  if (IS_VALID_POINTER(right_neighbor) && IS_FREE(right_neighbor))
+  if (IS_VALID_POINTER(right_neighbor) && GET_HEADER_SIZE(right_neighbor) >= 0)
   {
     free_list_delete(right_neighbor);
 
@@ -116,15 +116,18 @@ int memory_free(void *valid_ptr)
 
   free_list_insert(block_header);
 
-#if defined(CLEAR) || defined(TEST)
+  // clearing old headers and footers
   memset(TO_PAYLOAD(block_header), FREE_BYTE, block_header->size);
-#endif // CLEAR || TEST
 
   return 0;
 }
 
-void *get_required_block(Header_t *header, c_size_t size)
+void *get_required_block(Header_t *header, int32_t size)
 {
+  // for smaller sizes than minimal payload size
+  if (size < MIN_PAYLOAD_SIZE)
+    size = MIN_PAYLOAD_SIZE;
+
   header->size += POINTER_SIZE;
   c_size_t new_block_size = header->size - size;
 
@@ -149,9 +152,9 @@ void *get_required_block(Header_t *header, c_size_t size)
   Footer_t *footer = TO_FULL_FOOTER(header);
   footer->size = header->size;
 
-#ifdef TEST
+#ifdef CLEAR
   memset(TO_FULL_PAYLOAD(header), FRAGMENT_BYTE, header->size);
-#endif // TEST
+#endif // CLEAR
 
   // full block flag
   header->size = footer->size = TOGGLE_FULL_FREE(header->size);
@@ -205,9 +208,9 @@ void *memory_alloc(c_size_t size)
   // split block and insert free block to list
   Header_t *user_block = get_required_block(free_block, size);
 
-#ifdef TEST
+#ifdef CLEAR
   memset(TO_PAYLOAD(user_block), FULL_BYTE, size);
-#endif // TEST
+#endif // CLEAR
 
   // returning payload of block
   return TO_PAYLOAD(user_block);
@@ -250,9 +253,9 @@ void memory_init(void *ptr, c_size_t size)
   // link to first empty block from main memory header
   memory_header->next = block_header;
 
-#ifdef TEST
+#ifdef CLEAR
   memset(TO_PAYLOAD(block_header), FREE_BYTE, block_header->size);
-#endif // TEST
+#endif // CLEAR
 }
 
 #endif

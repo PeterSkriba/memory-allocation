@@ -20,8 +20,6 @@ This program is a simulation of memory allocation similar to the functionality f
 | :---------: | :-----: | :---------: |
 |    size     | content |    size     |
 
-_Minimum 1B payload allowed._
-
 ## Compile and Run
 
 _Windows and Linux compatible._
@@ -55,12 +53,10 @@ _Situated in [**main.c**](main.c)._
 
 ```C++
 #define CLEAR
-#define TEST
 #define ERROR
 ```
 
-- **CLEAR**: Clear payload after memory_free.
-- **TEST**: Memory visualization.
+- **CLEAR**: Clear garbage values like old headers and footers.
 - **ERROR**: Error messages.
 
 **_Comment out to turn off._**
