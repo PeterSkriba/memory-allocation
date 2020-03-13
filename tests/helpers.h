@@ -7,7 +7,9 @@
 
 #define GET_PERCENT(x, y) (((double)(x) / (y)) * 100)
 
-#define GET_RANDOM(from, to) ((rand() % ((to) - (from) + 1)) + (from))
+#define GET_RANDOM(from, to) ((int)((rand() % ((to) - (from) + 1)) + (from)))
+
+#define PRINT_TEST_RESULT(result) printf((result) ? (GREEN "  - OK\n" RESET) : (RED "  - FAIL\n" RESET))
 
 #define FREEZE                                           \
   if (printf("\nPress ENTER to continue..."), getchar()) \
@@ -24,7 +26,7 @@ void display_block(const Header_t *block, const char name[10])
   printf("║ %10s ║ [%14p]: ║║ %5dB ║ %14p ║║ %5dB ║\n",
          name,
          block,
-         ABS(block->size),
+         ABS(block->size) + (IS_FREE(block) ? POINTER_SIZE : 0),
          IS_FREE(block) ? block->next : NULL,
          GET_BLOCK_SIZE(block->size));
   printf("╚════════════╩═══════════════════╩╩════════╩════════════════╩╩════════╝\n" RESET);

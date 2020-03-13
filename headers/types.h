@@ -14,13 +14,13 @@ typedef struct Header
 {
   int32_t size;        // 4B
   struct Header *next; // 8B
-} Header_t;            // 12B
+} Header_t;            // = 12B
 
 #pragma pack(1)
 typedef struct Footer
 {
   int32_t size; // 4B
-} Footer_t;     // 4B
+} Footer_t;     // = 4B
 
 // ERROR TYPES
 typedef enum Error

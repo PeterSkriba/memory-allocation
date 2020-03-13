@@ -8,7 +8,7 @@
 #include "types.h"
 #include "variables.h"
 
-#define PRINT_MESSAGE(message) printf(RED BOLD ITALIC BLINK "\n%s\n" RESET, message)
+#define PRINT_MESSAGE(message) printf(RED BOLD ITALIC BLINK "%s\n" RESET, message)
 
 void handle_error(Error_e error)
 {

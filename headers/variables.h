@@ -14,7 +14,7 @@ void *heap_g = 0x0;
 #define HEADER_SIZE 0xC                              // 12B
 #define FOOTER_SIZE 0x4                              // 4B
 #define MIN_BLOCK_SIZE HEADER_SIZE + FOOTER_SIZE     // 16B
-#define MIN_MEMORY_SIZE HEADER_SIZE + MIN_BLOCK_SIZE // 29B
+#define MIN_MEMORY_SIZE HEADER_SIZE + MIN_BLOCK_SIZE // 28B
 #define FULL_SIGN -1
 
 #ifdef REWRITE_POINTER
@@ -35,19 +35,17 @@ void *heap_g = 0x0;
 // block segment sizes
 #define GET_HEADER_SIZE(header) (((Header_t *)(header))->size)
 #define GET_FOOTER_SIZE(footer) (((Footer_t *)(footer))->size)
-#define GET_BLOCK_SIZE(payload) (HEADER_SIZE + ABS(payload) + FOOTER_SIZE)
 #define GET_PAYLOAD_SIZE(size) (ABS(size) - HEADER_SIZE - FOOTER_SIZE)
+#define GET_BLOCK_SIZE(payload) (HEADER_SIZE + ABS(payload) + FOOTER_SIZE)
 // check if block is not allocated
-#define IS_FREE(header) (GET_HEADER_SIZE(header) > 0)
-#define IS_PREV_FOOTER_FREE(header) (GET_FOOTER_SIZE((void *)header - FOOTER_SIZE) > 0)
+#define IS_FREE(header) (GET_HEADER_SIZE(header) >= 0)
+#define IS_PREV_FOOTER_FREE(header) (GET_FOOTER_SIZE((void *)header - FOOTER_SIZE) >= 0)
 // move pointer to payload from header
 #define TO_PAYLOAD(header) ((void *)(header) + (IS_FREE(header) ? HEADER_SIZE : FULL_HEADER_SIZE))
 #define TO_FULL_PAYLOAD(header) ((void *)header + FULL_HEADER_SIZE)
 // move pointer to footer from header
 #define TO_FOOTER(header) (TO_PAYLOAD(header) + ABS(GET_HEADER_SIZE(header)))
 #define TO_FULL_FOOTER(header) (TO_FULL_PAYLOAD(header) + ABS(GET_HEADER_SIZE(header)));
-// move pointer from payload to header
-#define TO_FULL_HEADER(payload) ((void *)payload - FULL_HEADER_SIZE)
 // move pointer to next header from full block
 #define TO_NEXT_HEADER(header) (TO_FULL_PAYLOAD(header) + ABS(GET_HEADER_SIZE(header)) + FOOTER_SIZE)
 // move pointer from payload to next and previous blocks

@@ -15,7 +15,7 @@ void free_list_insert(Header_t *block)
   Header_t *current = heap_g;
 
   // find best place for free block
-  while (current != NULL && current->size < block->size)
+  while (current->next != NULL && current->next->size < block->size)
     current = current->next;
 
   // connect block to free list
@@ -88,15 +88,13 @@ int memory_free(void *valid_ptr)
 
   // making block size free
   block_header->size = block_footer->size = TOGGLE_FULL_FREE(block_header->size) - POINTER_SIZE;
+  block_header->next = NULL;
 
-  // blocks for merging
-  Header_t *left_neighbor = TO_PREV_NEIGHBOR(block_header);
-  Header_t *right_neighbor = TO_NEXT_NEIGHBOR(block_header);
-
-  //TODO: refactor
   // checking left neighbor and merging header
-  if (IS_VALID_POINTER(left_neighbor) && GET_HEADER_SIZE(left_neighbor) >= 0)
+  if (IS_VALID_POINTER((void *)block_header - FOOTER_SIZE) && IS_PREV_FOOTER_FREE(block_header))
   {
+    Header_t *left_neighbor = TO_PREV_NEIGHBOR(block_header);
+
     free_list_delete(left_neighbor);
 
     block_header = left_neighbor;
@@ -105,8 +103,10 @@ int memory_free(void *valid_ptr)
   }
 
   // checking right neighbor and merging footer
-  if (IS_VALID_POINTER(right_neighbor) && GET_HEADER_SIZE(right_neighbor) >= 0)
+  if (IS_VALID_POINTER(TO_NEXT_NEIGHBOR(block_header)) && IS_FREE(TO_NEXT_NEIGHBOR(block_header)))
   {
+    Header_t *right_neighbor = TO_NEXT_NEIGHBOR(block_header);
+
     free_list_delete(right_neighbor);
 
     block_header->size += GET_BLOCK_SIZE(right_neighbor->size);
@@ -139,6 +139,7 @@ void *get_required_block(Header_t *header, int32_t size)
     // header for free block
     Header_t *free_header = TO_NEXT_HEADER(header);
     free_header->size = GET_PAYLOAD_SIZE(new_block_size);
+    free_header->next = NULL;
 
     // footer for free block
     Footer_t *free_footer = TO_FOOTER(free_header);
