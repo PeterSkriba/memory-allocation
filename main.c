@@ -29,13 +29,10 @@
 
 #include "tests/tests.h"
 
-// TODO: ONE SOURCE
-// TODO: DOCUMENTATION
-
 int main()
 {
   /*
-   * For better enjoyment, run the program on the Linux operating system,
+   * For better enjoyment, run the tests on the Linux operating system,
    * leave all options on and do not change the content of the allocated pointer.
   */
 
@@ -59,12 +56,12 @@ int main()
   // test_random_blocks_allocation(memory_size_big, 5, 8, 50000);
 
   //? Custom tests
-  // test_memory_init();
-  // test_valid_pointers(128);
-  // test_memory_alloc();
-  // test_memory_check();
-  // test_memory_free();
-  // test_memory_free_cases();
+  test_memory_init();
+  test_valid_pointers(128);
+  test_memory_alloc();
+  test_memory_check();
+  test_memory_free();
+  test_memory_free_cases();
 
   return 0;
 }

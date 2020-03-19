@@ -37,6 +37,7 @@ void test(c_size_t *memory_size, c_size_t memory_idx, c_size_t block_size)
   print_free_list();
 
   printf(RED ITALIC "\nSUCCESSFULY ALLOCATED: %dB (%.2lf%%) of %dB\n" RESET, success, GET_PERCENT(success, ideal), ideal);
+  printf(" - %d of %d blocks\n", success / block_size, ideal / block_size);
 
   FREEZE
 }
@@ -249,6 +250,8 @@ void test_valid_pointers(c_size_t memory_size)
   }
 
   printf(YELLOW BOLD "\n######################################################################\n" RESET);
+
+  FREEZE
 }
 
 /*
@@ -322,6 +325,8 @@ void test_memory_free_cases()
   memory_free_case(1, 1, 1);
 
   printf(YELLOW BOLD "\n######################################################################\n" RESET);
+
+  FREEZE
 }
 
 /*
@@ -383,6 +388,8 @@ void test_memory_free()
   PRINT_TEST_RESULT(memory_free(ptr_free));
 
   printf(YELLOW BOLD "\n######################################################################\n" RESET);
+
+  FREEZE
 }
 
 /*
@@ -391,6 +398,8 @@ void test_memory_free()
 void test_memory_alloc()
 {
   printf(YELLOW BOLD "########################## Test memory_alloc ##########################\n" RESET);
+
+  memory_init(NULL, 0);
 
   printf("\n* Allocating zero size *\n");
   PRINT_TEST_RESULT(!memory_alloc(0));
@@ -442,6 +451,8 @@ void test_memory_alloc()
   print_memory(region, memory_size);
 
   printf(YELLOW BOLD "\n######################################################################\n" RESET);
+
+  FREEZE
 }
 
 #endif

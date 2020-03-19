@@ -32,9 +32,16 @@ void display_block(const Header_t *block, const char name[10])
   printf("╚════════════╩═══════════════════╩╩════════╩════════════════╩╩════════╝\n" RESET);
 }
 
+void print_memory_text(char region[], c_size_t size)
+{
+  putchar('\n');
+  for (int32_t byte = 0; byte < size; ++byte)
+    printf(YELLOW BOLD "[%3d]: %-15d\t <- %p\n" RESET, byte, region[byte], &region[byte]);
+}
+
 void print_memory(char region[], c_size_t size)
 {
-#ifdef CLEAR
+#if defined(CLEAR) && defined(__unix__)
   putchar('\n');
   for (int32_t byte = 0; byte < size; ++byte)
   {
@@ -57,6 +64,8 @@ void print_memory(char region[], c_size_t size)
       putchar('\n');
   }
   putchar('\n');
+#else
+  print_memory_text(region, size);
 #endif // CLEAR
 }
 
@@ -65,13 +74,6 @@ void print_free_list()
   putchar('\n');
   for (Header_t *current = ((Header_t *)heap_g)->next; current != NULL; current = current->next)
     display_block(current, "FREE BLOCK");
-}
-
-void print_memory_text(char region[], c_size_t size)
-{
-  putchar('\n');
-  for (int32_t byte = 0; byte < size; ++byte)
-    printf(YELLOW BOLD "[%3d]: %-15d\t <- %p\n" RESET, byte, region[byte], &region[byte]);
 }
 
 #endif
