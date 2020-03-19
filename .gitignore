@@ -6,3 +6,10 @@
 # PDF FILES #
 *.pdf
 !doc.pdf
+
+# FOLDERS #
+documentation/
+all_in_one/
+
+test.c
+testovac.c
