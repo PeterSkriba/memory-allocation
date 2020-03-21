@@ -1,12 +1,12 @@
 # Memory Allocation - Explicit free list
 
 This project was designed for the purpose of the assignment of the subject **Data Structures and Algorithms**.\
-This program is a simulation of memory allocation similar to the functionality found int the stdlib.h library.
+This program is a simulation of memory allocation similar to the functionality found int the stdlib.h library. Explicit free list method with first and best fit algorithm for searching free blocks.
 
 ## Memory block design
 
 - Total size of free block: 16B
-- Total size of full block: 9B
+- Total size of full block: 8B
 
 ### Free block design
 
