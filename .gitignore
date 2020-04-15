@@ -7,9 +7,6 @@
 *.pdf
 !doc.pdf
 
-# FOLDERS #
-documentation/
-all_in_one/
-
+# C FILES #
 test.c
 testovac.c
